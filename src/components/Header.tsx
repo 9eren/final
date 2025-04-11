@@ -1,7 +1,8 @@
 
 import React from "react";
-import { FileText, Settings } from "lucide-react";
+import { FileText, Upload, BarChart2, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 export default function Header() {
   return (
@@ -13,9 +14,24 @@ export default function Header() {
           </div>
           <h1 className="text-xl font-semibold bg-gradient-to-r from-purple to-purple-dark bg-clip-text text-transparent">BillBoy</h1>
         </div>
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" className="hover:bg-purple/10 transition-colors">
-            <Settings className="h-5 w-5 text-purple" />
+        <div className="flex items-center gap-3">
+          <Button variant="ghost" size="sm" asChild className="hover:bg-purple/10 transition-colors">
+            <Link to="/templates">
+              <FileText className="h-5 w-5 text-purple mr-1" />
+              <span>Templates</span>
+            </Link>
+          </Button>
+          <Button variant="ghost" size="sm" asChild className="hover:bg-purple/10 transition-colors">
+            <Link to="/analytics">
+              <BarChart2 className="h-5 w-5 text-purple mr-1" />
+              <span>Analytics</span>
+            </Link>
+          </Button>
+          <Button variant="ghost" size="sm" asChild className="hover:bg-purple/10 transition-colors">
+            <Link to="/security">
+              <Lock className="h-5 w-5 text-purple mr-1" />
+              <span>Security</span>
+            </Link>
           </Button>
         </div>
       </div>
