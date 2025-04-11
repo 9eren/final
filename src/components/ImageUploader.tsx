@@ -1,7 +1,6 @@
-
 import React, { useState, useRef } from 'react';
 import { Button } from "@/components/ui/button";
-import { Upload, Image as ImageIcon, Trash, ZoomIn, X, FilePlus } from "lucide-react";
+import { Upload, Image as ImageIcon, Trash, ZoomIn, X, FilePlus, Plus } from "lucide-react";
 import { toast } from "sonner";
 import { Card, CardContent } from "@/components/ui/card";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -45,8 +44,8 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageProcessed }) => {
       const reader = new FileReader();
       reader.onload = () => {
         const result = reader.result as string;
-        setImages(prev => [...prev, { original: result, enhanced: null }]);
-        processImage(result, prev.length);
+        setImages(prevImages => [...prevImages, { original: result, enhanced: null }]);
+        processImage(result, images.length);
       };
       reader.readAsDataURL(file);
     });

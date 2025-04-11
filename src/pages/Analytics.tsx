@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -30,8 +29,13 @@ const mockTimelineData = [
 
 const COLORS = ['#9b87f5', '#D6BCFA', '#E5DEFF', '#8E9196', '#1A1F2C'];
 
+interface DateRange {
+  from: Date;
+  to?: Date;
+}
+
 const Analytics = () => {
-  const [dateRange, setDateRange] = useState<{ from: Date; to: Date | undefined }>({
+  const [dateRange, setDateRange] = useState<DateRange>({
     from: new Date(2025, 3, 1), // April 1st, 2025
     to: new Date(2025, 3, 30), // April 30th, 2025
   });
@@ -189,7 +193,7 @@ const Analytics = () => {
                 <h3 className="font-semibold text-purple-dark mb-2">Top Spending Category</h3>
                 <div className="flex items-center gap-3">
                   <div className="w-16 h-16 rounded-full bg-purple flex items-center justify-center text-white text-xl font-bold">
-                    ${mockCategoryData[0].total}
+                    ₹{mockCategoryData[0].total}
                   </div>
                   <div>
                     <p className="text-lg font-medium">{mockCategoryData[0].name}</p>
@@ -200,7 +204,7 @@ const Analytics = () => {
               
               <div>
                 <h3 className="font-semibold text-purple-dark mb-2">Weekly Average Spending</h3>
-                <p className="text-2xl font-bold">${(mockCategoryData.reduce((acc, curr) => acc + curr.total, 0) / 4).toFixed(2)}</p>
+                <p className="text-2xl font-bold">₹{(mockCategoryData.reduce((acc, curr) => acc + curr.total, 0) / 4).toFixed(2)}</p>
               </div>
             </div>
           </CardContent>
