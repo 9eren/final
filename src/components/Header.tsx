@@ -10,7 +10,7 @@ export default function Header() {
       <div className="flex justify-between items-center max-w-7xl mx-auto">
         <div className="flex items-center gap-2">
           <div className="bg-purple/10 p-2 rounded-full">
-            <FileText className="h-6 w-6 text-purple" />
+            <div className="text-purple font-bold text-lg">bb</div>
           </div>
           <h1 className="text-xl font-semibold bg-gradient-to-r from-purple to-purple-dark bg-clip-text text-transparent">BillBoy</h1>
         </div>
@@ -38,3 +38,4 @@ export default function Header() {
     </header>
   );
 }
+
