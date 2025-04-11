@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { Upload, Image as ImageIcon, Trash, ZoomIn } from "lucide-react";
 import { toast } from "sonner";
@@ -16,6 +16,12 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageProcessed }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isZoomed, setIsZoomed] = useState(false);
   const isMobile = useIsMobile();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  const handleButtonClick = () => {
+    // Programmatically trigger the file input click
+    fileInputRef.current?.click();
+  };
   
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -69,16 +75,19 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageProcessed }) => {
   const clearImage = () => {
     setImage(null);
     setEnhancedImage(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   return (
     <div className="w-full">
       {!image ? (
         <div className="flex flex-col items-center">
-          <Card className="w-full border-dashed border-2 border-purple-light hover:border-purple transition-colors">
+          <Card className="w-full border-dashed border-2 border-purple-light hover:border-purple transition-colors animate-pulse hover:animate-none">
             <CardContent className="p-6 flex flex-col items-center">
               <div className="flex flex-col items-center justify-center py-10">
-                <div className="bg-secondary rounded-full p-4 mb-4">
+                <div className="bg-purple/10 rounded-full p-4 mb-4">
                   <Upload className="h-8 w-8 text-purple" />
                 </div>
                 <p className="text-center mb-4">
@@ -86,19 +95,21 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageProcessed }) => {
                   <br />
                   <span className="text-sm text-gray-500">PNG, JPG or PDF up to 10MB</span>
                 </p>
-                <label htmlFor="image-upload">
-                  <input 
-                    id="image-upload" 
-                    type="file" 
-                    accept="image/*" 
-                    onChange={handleImageUpload} 
-                    className="hidden" 
-                  />
-                  <Button className="bg-purple hover:bg-purple-dark">
-                    <ImageIcon className="h-4 w-4 mr-2" />
-                    Select Image
-                  </Button>
-                </label>
+                <input 
+                  ref={fileInputRef}
+                  id="image-upload" 
+                  type="file" 
+                  accept="image/*" 
+                  onChange={handleImageUpload} 
+                  className="hidden" 
+                />
+                <Button 
+                  className="bg-purple hover:bg-purple-dark transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1"
+                  onClick={handleButtonClick}
+                >
+                  <ImageIcon className="h-4 w-4 mr-2" />
+                  Select Image
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -112,17 +123,17 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageProcessed }) => {
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="h-8 w-8 p-0" 
+                  className="h-8 w-8 p-0 hover:bg-purple/10" 
                   onClick={() => setIsZoomed(!isZoomed)}
                 >
                   <ZoomIn className="h-4 w-4" />
                 </Button>
               </div>
-              <div className="relative border border-border rounded-md overflow-hidden bg-secondary/30">
+              <div className="relative border border-border rounded-md overflow-hidden bg-secondary/30 transition-all duration-300">
                 <img 
                   src={image} 
                   alt="Original Bill" 
-                  className={`w-full object-contain ${isZoomed ? 'cursor-zoom-out max-h-[500px]' : 'cursor-zoom-in max-h-[300px]'}`}
+                  className={`w-full object-contain ${isZoomed ? 'cursor-zoom-out max-h-[500px]' : 'cursor-zoom-in max-h-[300px]'} transition-all duration-300`}
                   onClick={() => setIsZoomed(!isZoomed)}
                 />
               </div>
@@ -137,7 +148,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageProcessed }) => {
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    className="h-8" 
+                    className="h-8 hover:border-purple/50 hover:text-purple transition-colors" 
                     onClick={clearImage}
                   >
                     <Trash className="h-4 w-4 mr-1" />
@@ -145,7 +156,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageProcessed }) => {
                   </Button>
                 ) : null}
               </div>
-              <div className="border border-border rounded-md overflow-hidden bg-secondary/30">
+              <div className="border border-border rounded-md overflow-hidden bg-secondary/30 transition-all duration-300">
                 {isProcessing ? (
                   <div className="flex items-center justify-center h-[300px]">
                     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple"></div>
@@ -154,7 +165,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageProcessed }) => {
                   <img 
                     src={enhancedImage} 
                     alt="Enhanced Bill" 
-                    className="w-full object-contain max-h-[300px]"
+                    className="w-full object-contain max-h-[300px] transition-all duration-300"
                   />
                 ) : (
                   <div className="flex items-center justify-center h-[300px]">
@@ -166,19 +177,22 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageProcessed }) => {
           </div>
           
           <div className="flex justify-end gap-2 mt-4">
-            <label htmlFor="image-upload-new">
-              <input 
-                id="image-upload-new" 
-                type="file" 
-                accept="image/*" 
-                onChange={handleImageUpload} 
-                className="hidden" 
-              />
-              <Button variant="outline">
-                <ImageIcon className="h-4 w-4 mr-2" />
-                New Image
-              </Button>
-            </label>
+            <input 
+              ref={fileInputRef}
+              id="image-upload-new" 
+              type="file" 
+              accept="image/*" 
+              onChange={handleImageUpload} 
+              className="hidden" 
+            />
+            <Button 
+              variant="outline"
+              className="hover:border-purple/50 hover:text-purple transition-colors"
+              onClick={handleButtonClick}
+            >
+              <ImageIcon className="h-4 w-4 mr-2" />
+              New Image
+            </Button>
           </div>
         </div>
       )}
